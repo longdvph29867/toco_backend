@@ -11,7 +11,7 @@ const categoriesSchema = new mongoose.Schema({
   categorySlug: {
     type: String,
     require: true,
-    unique: true,
+    unique: false,
     defaultValue: "Uncategorized"
   }
 }, {

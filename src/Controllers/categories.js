@@ -48,7 +48,7 @@ export const create = async (req, res) => {
     let data = {...req.body};
     data.categorySlug = slugify(data.categoryName, { lower: true })
 
-    const categoryExists = await Categories.findOne({ slug: data.categorySlug});
+    const categoryExists = await Categories.findOne({ categorySlug: data.categorySlug });
     if(categoryExists) {
       return res.status(404).json({
         message: "Danh mục đã tồn tại",

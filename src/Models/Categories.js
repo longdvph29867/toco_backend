@@ -15,7 +15,7 @@ const categoriesSchema = new mongoose.Schema({
     defaultValue: "Uncategorized"
   }
 }, {
-    timestamps: true,
+    timestamps: false,
     versionKey: false,
     collection: "Categories"
 });

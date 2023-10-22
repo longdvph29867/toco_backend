@@ -15,9 +15,9 @@ const categoriesSchema = new mongoose.Schema({
     defaultValue: "Uncategorized"
   }
 }, {
-    timestamps: false,
-    versionKey: false,
-    collection: "Categories"
+  timestamps: false,
+  versionKey: false,
+  collection: "Categories"
 });
 
 const Categories = mongoose.model("Categories", categoriesSchema);

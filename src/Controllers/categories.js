@@ -1,5 +1,6 @@
 import Categories from "../Models/Categories.js"
 import slugify from "slugify";
+import { categoryValid } from "../Validations/categories.js";
 
 export const getAll = async (req, res) => {
   try {
@@ -45,6 +46,14 @@ export const getDetail = async (req, res) => {
 
 export const create = async (req, res) => {
   try {
+    // validation
+    const { error } = categoryValid.validate(req.body);
+    if(error) {
+      return res.status(400).json({
+        message: error.details[0].message,
+      })
+    }
+
     let data = {...req.body};
     data.categorySlug = slugify(data.categoryName, { lower: true })
 
@@ -71,6 +80,67 @@ export const create = async (req, res) => {
     res.status(500).json({
       name: err.name,
       message: err.message,
+    })
+  }
+}
+
+export const update = async (req, res) => {
+  try {
+    // validation
+    const { error } = categoryValid.validate(req.body);
+    if(error) {
+      return res.status(400).json({
+        message: error.details[0].message,
+      })
+    }
+
+    let data = {...req.body};
+    data.categorySlug = slugify(data.categoryName, { lower: true })
+
+    const categoryExists = await Categories.findOne({ categorySlug: data.categorySlug, _id: { $ne: req.params.id} });
+    if(categoryExists) {
+      return res.status(404).json({
+        message: "Danh mục đã tồn tại",
+      });
+    }
+
+    const category = await Categories.findByIdAndUpdate( req.params.id, data, { new: true });
+    if(!category) {
+      return res.status(404).json({
+        message: 'Cập nhật danh mục thất bại'
+      })
+    }
+
+    return res.status(200).json({
+      message: "Cập nhật danh mục thành công",
+      data: category,
+    });
+  }
+  catch (err) {
+    res.status(500).json({
+      name: err.name,
+      message: err.message,
+    })
+  }
+}
+
+export const remove = async (req, res) => {
+  try {
+    const data = await Categories.findByIdAndDelete(req.params.id);
+    if(!data) {
+      return res.status(400).json({
+        message: "Xoá thất bại!"
+      })
+    }
+    return res.status(200).json({
+      messgae: "Xoá thành công!",
+      data: data
+    })
+  }
+  catch (err) {
+    res.status(500).json({
+      name: err.name,
+      message: err.message
     })
   }
 }

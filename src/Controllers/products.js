@@ -1,11 +1,25 @@
 import slugify from "slugify";
+import Categories from "../Models/Categories.js";
 import Products from "../Models/Products.js";
 import { productValid } from "../Validations/products.js";
 
 
 export const getAll = async (req, res) => {
     try {
-      const products = await Products.find();
+      
+      const categorySlug = req.query.category;
+      const search = req.query.search;
+      let products = []
+      if(categorySlug) {
+        const category = await Categories.findOne({categorySlug: categorySlug})
+        products = await Products.find({id_category: { $in: category._id}});
+      }
+      else if(search) {
+        products = await Products.find({productName: { $regex: search, $options: 'i'}});
+      }
+      else {
+        products = await Products.find();
+      }
       if(!products && products.length === 0) {
         return res.status(404).json({
           message: "Không tìm thấy dữ liệu!"
@@ -19,7 +33,9 @@ export const getAll = async (req, res) => {
     }
     catch (err) {
       res.status(500).json({
-        message: "Lỗi trong quá trình lấy dữ liệu!"
+        message: "Lỗi trong quá trình lấy dữ liệu!",
+        name: err.name,
+        message: err.message,
       })
       
     }

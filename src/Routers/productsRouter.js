@@ -11,4 +11,5 @@ routerProducts.post('/', checkPermission, create)
 routerProducts.put('/:id', checkPermission, update)
 routerProducts.delete('/:id', checkPermission, remove)
 
+
 export default routerProducts;

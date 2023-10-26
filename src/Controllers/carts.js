@@ -3,7 +3,11 @@ import { cartsValid } from "../Validations/carts.js";
 
 export const getAllByAccount = async (req, res) => {
   try {
-    const products = await Carts.find({account: req.params.account}).select('-account');
+    const products = await Carts.find({account: req.params.account}).populate({
+      path: "id_product",
+      select: "_id productName slug images price sale_price",
+      model: "Products"
+    }).select('-account');
     if(!products && products.length === 0) {
       return res.status(404).json({
         message: "Không tìm thấy dữ liệu!"

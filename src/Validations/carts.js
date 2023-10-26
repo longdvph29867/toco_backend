@@ -15,9 +15,8 @@ export const cartsValid = Joi.object({
         'number.base': "Số lượng là số nguyên!",
         'number.greater': "Số lượng phải lớn 0!",
     }),
-    toppings: Joi.array().min(1).required().messages({
+    id_topping: Joi.array().required().messages({
         "array.empty": "Topping không để trống!",
         "any.required": "Topping là bắt buộc!",
-        "array.min": "Phải có ít nhất 1 topping!",
     }),
 }).options({ abortEarly: false })

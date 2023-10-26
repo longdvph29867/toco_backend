@@ -7,6 +7,10 @@ export const getAllByAccount = async (req, res) => {
       path: "id_product",
       select: "_id productName slug images price sale_price",
       model: "Products"
+    }).populate({
+      path: "id_topping",
+      select: "_id toppingName toppingPrice",
+      model: "Toppings"
     }).select('-account');
     if(!products && products.length === 0) {
       return res.status(404).json({
@@ -41,9 +45,9 @@ export const create = async (req, res) => {
       const cartExists = await Carts.findOne({ 
         account: data.account,
         id_product: data.id_product,
-        toppings: {
-          $all: data.toppings,
-          $size: data.toppings.length
+        id_topping: {
+          $all: data.id_topping,
+          $size: data.id_topping.length
         }
       });
       if(cartExists) {

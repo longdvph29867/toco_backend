@@ -14,9 +14,10 @@ const cartsSchema = new mongoose.Schema({
     type: Number,
     default: 1,
   },
-  toppings: [
+  id_topping: [
     {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Toppings'
     }
   ],
 }, {

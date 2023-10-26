@@ -1,5 +1,5 @@
 import Carts from "../Models/Cats.js";
-import { cartsValid } from "../Validations/carts.js";
+import { cartsQuantityValid, cartsValid } from "../Validations/carts.js";
 
 export const getAllByAccount = async (req, res) => {
   try {
@@ -78,6 +78,41 @@ export const create = async (req, res) => {
       })
     }
   }
+
+export const updateQuantity = async (req, res) => {
+  try {
+    // validation
+    const { error } = cartsQuantityValid.validate(req.body);
+    if(error) {
+      return res.status(400).json({
+        message: error.details.map(item => item.message),
+      })
+    }
+
+    const cartId = req.params.id;
+
+    let filter = { _id: cartId };
+    let data = { quantity: req.body.quantity };
+
+    const cart = await Carts.updateOne(filter, data);
+    if(!cart) {
+      return res.status(404).json({
+        message: 'Cập nhật thất bại!'
+      })
+    }
+
+    return res.status(200).json({
+      message: "Cập nhật thành công!",
+      data: cart,
+    });
+  }
+  catch (err) {
+    res.status(500).json({
+      name: err.name,
+      message: err.message,
+    })
+  }
+}
 
 export const remove = async (req, res) => {
   try {

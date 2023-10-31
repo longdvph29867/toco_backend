@@ -45,10 +45,17 @@ export const create = async (req, res) => {
       const cartExists = await Carts.findOne({ 
         account: data.account,
         id_product: data.id_product,
-        id_topping: {
-          $all: data.id_topping,
-          $size: data.id_topping.length
-        }
+        $or: [
+          {
+            id_topping: {
+              $all: data.id_topping,
+              $size: data.id_topping.length
+            }
+          },
+          {
+            id_topping: { $size: 0 }
+          }
+        ]
       });
       if(cartExists) {
         cartExists.quantity += Number(data.quantity)

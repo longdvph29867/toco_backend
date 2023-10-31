@@ -4,7 +4,24 @@ import { categoryValid } from "../Validations/categories.js";
 
 export const getAll = async (req, res) => {
   try {
-    const categories = await Categories.find();
+    const categories = await Categories.aggregate([
+      {
+        $lookup: {
+          from: 'Products',
+          localField: '_id',
+          foreignField: 'id_category',
+          as: 'products',
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          categoryName: 1,
+          categorySlug: 1,
+          productCount: { $size: '$products' },
+        },
+      },
+  ]);;
     if(!categories && categories.length === 0) {
       return res.status(404).json({
         message: "Không tìm thấy dữ liệu!"

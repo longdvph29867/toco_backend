@@ -1,6 +1,6 @@
 import Users from "../Models/Users.js";
 import bcryptjs from 'bcryptjs';
-import { userValid } from "../Validations/users.js";
+import { userUpdateValid, userValid } from "../Validations/users.js";
 
 
 export const getAll = async (req, res) => {
@@ -97,7 +97,7 @@ export const create = async (req, res) => {
 export const update = async (req, res) => {
   try {
     // validation
-    const { error } = userValid.validate(req.body);
+    const { error } = userUpdateValid.validate(req.body);
     if(error) {
       return res.status(400).json({
         message: error.details.map(item => item.message),

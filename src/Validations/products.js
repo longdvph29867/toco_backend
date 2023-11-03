@@ -29,8 +29,8 @@ export const productValid = Joi.object({
         "array.max": "Không thể có nhiều hơn 5 hình ảnh!", 
     }),
     id_category: Joi.array().min(1).required().messages({
-        "array.empty": "Hình ảnh không để trống!",
-        "any.required": "Hình ảnh là bắt buộc!",
+        "array.empty": "Danh mục không để trống!",
+        "any.required": "Danh mục là bắt buộc!",
         "array.min": "Phải có ít nhất 1 danh mục!",
     }),
 
